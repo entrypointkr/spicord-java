@@ -51,7 +51,7 @@ public class SpicordPlugin extends JavaPlugin implements SpicordPlatform {
     @Override
     public void onEnable() {
         File configFile = getPath().getConfigFile();
-        if (configFile.isFile()) {
+        if (!configFile.isFile()) {
             saveFile(configFile, saveYaml(defaultConfig().serialize()));
         }
         setData(loadAllSpicordData(this)
