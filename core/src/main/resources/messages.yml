@@ -1,0 +1,13 @@
+simple: "simple msg"
+multi:
+  - "multiline 1"
+  - "2"
+embed:
+  title: "사유: %reason%"
+  description: "%player%(%uuid%)"
+  url: "https://ko.namemc.com/search?q=%player%"
+  thumbnail: "https://crafatar.com/avatars/%uuid%?overlay=true"
+  color: orange
+  author:
+    title: "서버에서 추방되었습니다."
+    icon: "https://crafatar.com/avatars/%uuid%?overlay=true"

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.16/6dc192c7f93ec1853f70d59d8a6dcf94eb42866/lombok-1.18.16.jar" />
+        </processorPath>
+        <module name="spicord.spicord-core.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <option name="bungeeAnnotationResultPath" value="D:\Projects\Java\spicord\bukkit\build\spigradle\bungee_main" />
+        <option name="nukkitAnnotationResultPath" value="D:\Projects\Java\spicord\bukkit\build\spigradle\nukkit_main" />
+        <option name="pluginAnnotationResultPath" value="D:\Projects\Java\spicord\bukkit\build\spigradle\plugin_main" />
+        <option name="spigotAnnotationResultPath" value="D:\Projects\Java\spicord\bukkit\build\spigradle\spigot_main" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/kr.entree/spigradle-annotations/2.1.1/140e14d5fb373843420f0719f6f83cacc07d8cd1/spigradle-annotations-2.1.1.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.16/6dc192c7f93ec1853f70d59d8a6dcf94eb42866/lombok-1.18.16.jar" />
+        </processorPath>
+        <module name="spicord.spicord-bukkit.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <option name="bungeeAnnotationResultPath" value="D:\Projects\Java\spicord\bungee\build\spigradle\bungee_main" />
+        <option name="nukkitAnnotationResultPath" value="D:\Projects\Java\spicord\bungee\build\spigradle\nukkit_main" />
+        <option name="pluginAnnotationResultPath" value="D:\Projects\Java\spicord\bungee\build\spigradle\plugin_main" />
+        <option name="spigotAnnotationResultPath" value="D:\Projects\Java\spicord\bungee\build\spigradle\spigot_main" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/kr.entree/spigradle-annotations/2.1.1/140e14d5fb373843420f0719f6f83cacc07d8cd1/spigradle-annotations-2.1.1.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.16/6dc192c7f93ec1853f70d59d8a6dcf94eb42866/lombok-1.18.16.jar" />
+        </processorPath>
+        <module name="spicord.spicord-bungee.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.8" />
+  </component>
+</project>
