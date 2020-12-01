@@ -99,9 +99,10 @@ public class SpicordCommands {
     public static Either<String, Tuple2<Runnable, String>> evaluateCommand(
             SpicordPlatform spicord, CommandType type) {
         if (type instanceof CommandType.Reload) {
+            final Executor async = spicord.getExecution().getAsync();
             final Executor sync = spicord.getExecution().getSync();
             return Right(Tuple(
-                    () -> sync.execute(() -> {
+                    () -> async.execute(() -> {
                         SpicordData data = loadAllSpicordData(spicord);
                         sync.execute(() -> spicord.setData(data));
                     }),
