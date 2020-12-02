@@ -35,7 +35,7 @@ import static kr.entree.spicord.discord.Discords.preparingDiscord;
 public class SpicordBungeePlugin extends Plugin implements SpicordPlatform {
     private final Executor sync = pluginExecutor(this);
     private final Executor async = pluginAsyncExecutor(this);
-    private final Lazy<SpicordPath> paths = Lazy.of(() -> pathOf(
+    private final Lazy<SpicordPath> path = Lazy.of(() -> pathOf(
             new File(getDataFolder(), "config.yml"),
             new File(getDataFolder(), "guilds.yml"),
             new File(getDataFolder(), "channels.yml"),
@@ -88,7 +88,7 @@ public class SpicordBungeePlugin extends Plugin implements SpicordPlatform {
 
     @Override
     public SpicordPath getPath() {
-        return paths.get();
+        return path.get();
     }
 
     @Override
