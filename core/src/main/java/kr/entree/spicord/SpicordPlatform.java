@@ -1,8 +1,6 @@
 package kr.entree.spicord;
 
-import org.intellij.lang.annotations.Language;
-
-import java.util.Map;
+import java.util.logging.Logger;
 
 public interface SpicordPlatform {
     SpicordData getData();
@@ -19,5 +17,5 @@ public interface SpicordPlatform {
 
     Execution getExecution();
 
-    Map<String, Object> loadYaml(@Language("yaml") String contents);
+    Logger getLogger();
 }

@@ -1,9 +1,9 @@
-package kr.entree.spicord.bukkit.config;
+package kr.entree.spicord.config;
 
 import io.vavr.control.Try;
-import kr.entree.spicord.config.FileUtils;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.intellij.lang.annotations.Language;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,10 +13,16 @@ import java.util.Collections;
 import java.util.Map;
 
 public class Yamls {
+    private static final Yaml yaml = createYaml();
+
+    private static Yaml createYaml() {
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        return new Yaml(options);
+    }
+
     public static Map<String, Object> loadYaml(@Language("yaml") String contents) {
-        YamlConfiguration yaml = new YamlConfiguration();
-        return Try.run(() -> yaml.loadFromString(contents))
-                .map(__ -> yaml.getValues(false))
+        return Try.of(() -> yaml.<Map<String, Object>>load(contents))
                 .getOrElse(Collections.emptyMap());
     }
 
@@ -33,8 +39,6 @@ public class Yamls {
     }
 
     public static String saveYaml(Map<String, ?> map) {
-        YamlConfiguration config = new YamlConfiguration();
-        map.forEach(config::set);
-        return config.saveToString();
+        return yaml.dump(map);
     }
 }

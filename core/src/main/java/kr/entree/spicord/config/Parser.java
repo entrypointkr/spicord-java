@@ -1,6 +1,6 @@
 package kr.entree.spicord.config;
 
-import io.vavr.collection.HashMap;
+import io.vavr.collection.LinkedHashMap;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -46,7 +46,7 @@ public class Parser {
     }
 
     public static Option<String> getType(Map<String, ?> map) {
-        return getString(map, "type");
+        return getString(map, "type").map(String::toLowerCase);
     }
 
     public static <T> Option<T> firstOne(Map<String, T> node, Seq<String> keys) {
@@ -61,17 +61,19 @@ public class Parser {
     public static Seq<?> toCollection(Object value) {
         return value instanceof Collection
                 ? ofAll((Collection<?>) value)
-                : Seq();
+                : Seq(value);
     }
 
-    public static io.vavr.collection.Map<?, ?> toMap(Object value) {
-        return value instanceof Map
-                ? HashMap.ofAll((Map<?, ?>) value)
-                : HashMap.empty();
+    public static Map<Object, Object> toMap(Object value) {
+        return (value instanceof Map
+                ? LinkedHashMap.<Object, Object>ofAll((Map<?, ?>) value)
+                : LinkedHashMap.empty()).toJavaMap();
     }
 
-    public static io.vavr.collection.Map<String, ?> toStringMap(Object value) {
-        return toMap(value).map((k, v) -> Tuple(k.toString(), v));
+    public static Map<String, Object> toStringMap(Object value) {
+        return LinkedHashMap.ofAll(toMap(value))
+                .map((k, v) -> Tuple(k.toString(), v))
+                .toJavaMap();
     }
 
     public static Seq<String> toStrings(Object value) {

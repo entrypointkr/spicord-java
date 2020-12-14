@@ -9,5 +9,5 @@ embed:
   thumbnail: "https://crafatar.com/avatars/%uuid%?overlay=true"
   color: orange
   author:
-    title: "서버에서 추방되었습니다."
+    name: "서버에서 추방되었습니다."
     icon: "https://crafatar.com/avatars/%uuid%?overlay=true"

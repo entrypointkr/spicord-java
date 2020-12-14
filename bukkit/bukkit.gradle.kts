@@ -37,9 +37,6 @@ spigot {
 }
 
 tasks {
-    compileJava {
-        options.encoding = "UTF-8"
-    }
     jar {
         dependsOn(shadowJar)
     }

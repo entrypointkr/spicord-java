@@ -1,5 +1,8 @@
 package kr.entree.spicord.discord.contents;
 
+import io.vavr.API;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.LinkedHashMap;
 import io.vavr.control.Option;
 import kr.entree.spicord.config.Parser;
 import lombok.Builder;
@@ -17,11 +20,11 @@ import static kr.entree.spicord.config.Parser.getString;
 
 @Data
 @Builder(
-        builderClassName = "Builder",
-        setterPrefix = "set"
+        builderClassName = "Builder"
 )
-public class EmbedContents {
+public class EmbedContents implements MessageContents {
     private final String title;
+    private final String url;
     private final String description;
     private final Color color;
     private final String thumbnail;
@@ -56,6 +59,14 @@ public class EmbedContents {
                 return None();
             }
         }
+
+        public Map<String, Object> serialize() {
+            return HashMap.<String, Object>ofEntries(API.Seq(
+                    Tuple("name", Some(getName())),
+                    Tuple("value", Some(getValue())),
+                    Tuple("inline", isInline() ? Some(true) : None())
+            )).toJavaMap();
+        }
     }
 
     @Data
@@ -75,6 +86,16 @@ public class EmbedContents {
                             getOne(map, "icon")
                                     .map(Object::toString).getOrNull()
                     ));
+        }
+
+        public Map<String, Object> serialize() {
+            return LinkedHashMap.of(
+                    "name", Some(name),
+                    "link", Option(linkUrl),
+                    "icon", Option(iconUrl)
+            ).<String, Object>flatMap((k, ov) ->
+                    ov.map(v -> Tuple(k, v))
+            ).toJavaMap();
         }
     }
 }

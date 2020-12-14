@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.function.Supplier;
 
 import static java.nio.file.Files.newBufferedReader;
 import static java.nio.file.Files.newBufferedWriter;
@@ -27,7 +26,7 @@ public class FileUtils {
             try {
                 String line = reader.readLine();
                 if (line == null) break;
-                builder.append(line);
+                builder.append(line).append("\n");
             } catch (Exception ex) {
                 return Try.failure(ex);
             }
@@ -35,7 +34,7 @@ public class FileUtils {
         return Try.success(builder.toString());
     }
 
-    public static Try<String> readFile(File file) {
+    public static Try<String> readFileContents(File file) {
         return Try.withResources(() -> newBufferedReader(file.toPath(), StandardCharsets.UTF_8))
                 .of(reader -> read(reader).get());
     }

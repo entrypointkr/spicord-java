@@ -4,8 +4,8 @@ import kr.entree.spicord.config.SpicordConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static kr.entree.spicord.bukkit.config.Yamls.loadYaml;
 import static kr.entree.spicord.config.SpicordParser.parseConfig;
+import static kr.entree.spicord.config.Yamls.loadYaml;
 
 public class ConfigTest {
     @Test
