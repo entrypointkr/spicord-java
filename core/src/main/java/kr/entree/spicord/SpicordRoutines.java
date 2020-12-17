@@ -8,11 +8,11 @@ import kr.entree.spicord.config.SpicordParser;
 import kr.entree.spicord.config.Yamls;
 import kr.entree.spicord.discord.Discord;
 import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +26,7 @@ import static kr.entree.spicord.config.FileUtils.saveFile;
 import static kr.entree.spicord.config.SpicordConfig.*;
 import static kr.entree.spicord.config.SpicordParser.saveMessages;
 import static kr.entree.spicord.config.Yamls.saveYaml;
+import static kr.entree.spicord.discord.Discords.emptyDiscord;
 import static kr.entree.spicord.discord.Discords.preparingDiscord;
 import static kr.entree.spicord.jda.JDADiscord.createJDA;
 
@@ -95,13 +96,16 @@ public class SpicordRoutines {
         logger.log(Level.WARNING, throwable, () -> "Error!");
     }
 
-    public static Consumer<Discord> discordSetter(SpicordPlatform sp) {
-        return newDiscord -> sp.setData(sp.getData().withDiscord(newDiscord));
+    public static void setDiscord(SpicordPlatform sp, @Nullable Discord discord) {
+        sp.setData(sp.getData()
+                .withDiscord(discord != null
+                        ? discord
+                        : emptyDiscord()));
     }
 
     public static void reconnectDiscord(SpicordPlatform sp) {
         sp.setData(sp.getData().withDiscord(preparingDiscord()));
         Future.of(sp.getExecution().getAsync(), () ->
-                createJDADiscord(sp).peek(discordSetter(sp)));
+                createJDADiscord(sp).peek(d -> setDiscord(sp, d)));
     }
 }

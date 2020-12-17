@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.concurrent.Executor;
@@ -19,7 +20,6 @@ import static kr.entree.spicord.SpicordRoutines.*;
 import static kr.entree.spicord.bungee.command.BungeeCommands.bungeeCommand;
 import static kr.entree.spicord.bungee.task.BungeeExecutors.pluginAsyncExecutor;
 import static kr.entree.spicord.bungee.task.BungeeExecutors.pluginExecutor;
-import static kr.entree.spicord.discord.Discords.emptyDiscord;
 
 public class SpicordBungeePlugin extends Plugin implements SpicordPlatform {
     private final Executor sync = pluginExecutor(this);
@@ -43,11 +43,12 @@ public class SpicordBungeePlugin extends Plugin implements SpicordPlatform {
     public void onEnable() {
         // 1
         createSpicordFiles(getPath());
-        // 2, 4
-        setData(loadAllSpicordData(this)
-                .withDiscord(createJDADiscord(this)
-                        .onFailure(this::logError)
-                        .getOrElse(emptyDiscord())));
+        // 2
+        setData(loadAllSpicordData(this));
+        // 4
+        createJDADiscord(this)
+                .peek(this::setDiscord)
+                .onFailure(this::logError);
         // 3
         ProxyServer.getInstance().getPluginManager()
                 .registerCommand(this, bungeeCommand("spicord", Seq(), (commander, args) ->
@@ -61,8 +62,8 @@ public class SpicordBungeePlugin extends Plugin implements SpicordPlatform {
         }, 5L, 5L, TimeUnit.SECONDS);
     }
 
-    public void setDiscord(Discord discord) {
-        setData(getData().withDiscord(discord != null ? discord : emptyDiscord()));
+    public void setDiscord(@Nullable Discord discord) {
+        SpicordRoutines.setDiscord(this, discord);
     }
 
     public void logError(Throwable throwable) {

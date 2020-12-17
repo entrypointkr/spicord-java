@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.concurrent.Executor;
@@ -20,7 +21,6 @@ import static kr.entree.spicord.SpicordRoutines.*;
 import static kr.entree.spicord.bukkit.command.BukkitCommands.bukkitCommand;
 import static kr.entree.spicord.bukkit.task.BukkitExecutors.pluginAsyncExecutor;
 import static kr.entree.spicord.bukkit.task.BukkitExecutors.pluginExecutor;
-import static kr.entree.spicord.discord.Discords.emptyDiscord;
 
 public class SpicordPlugin extends JavaPlugin implements SpicordPlatform {
     private final Executor sync = pluginExecutor(this);
@@ -42,7 +42,7 @@ public class SpicordPlugin extends JavaPlugin implements SpicordPlatform {
         createSpicordFiles(getPath());
         setData(loadAllSpicordData(this));
         createJDADiscord(this)
-                .peek(discordSetter(this))
+                .peek(this::setDiscord)
                 .onFailure(this::logError);
         long fiveSecs = 5L * 20L;
         getCommand("spicord").setExecutor(bukkitCommand((commander, args) ->
@@ -60,12 +60,12 @@ public class SpicordPlugin extends JavaPlugin implements SpicordPlatform {
         setDiscord(null);
     }
 
-    public void logError(Throwable throwable) {
-        SpicordRoutines.logError(getLogger(), throwable);
+    private void setDiscord(@Nullable Discord discord) {
+        SpicordRoutines.setDiscord(this, discord);
     }
 
-    public void setDiscord(Discord discord) {
-        setData(getData().withDiscord(discord != null ? discord : emptyDiscord()));
+    public void logError(Throwable throwable) {
+        SpicordRoutines.logError(getLogger(), throwable);
     }
 
     @Override
