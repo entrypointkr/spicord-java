@@ -84,15 +84,15 @@ public class SpicordRoutines {
         return evaluateSpicordCommand(sp, commander, args)
                 .apply((runnable, message) -> Try.runRunnable(runnable)
                         .onSuccess(__ -> commander.sendMessage(message))
-                        .onFailure(errorLogger(sp.getLogger())));
+                        .onFailure(th -> logError(sp.getLogger(), th)));
     }
 
     public static Try<Discord> createJDADiscord(SpicordPlatform platform) {
         return createJDA(platform.getExecution().getAsync(), platform.getData().getConfig().getToken());
     }
 
-    public static Consumer<Throwable> errorLogger(Logger logger) {
-        return th -> logger.log(Level.WARNING, th, () -> "Error!");
+    public static void logError(Logger logger, Throwable throwable) {
+        logger.log(Level.WARNING, throwable, () -> "Error!");
     }
 
     public static Consumer<Discord> discordSetter(SpicordPlatform sp) {

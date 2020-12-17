@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.concurrent.Executor;
-import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
 import static kr.entree.spicord.SpicordData.emptyData;
@@ -44,11 +43,11 @@ public class SpicordPlugin extends JavaPlugin implements SpicordPlatform {
         setData(loadAllSpicordData(this));
         createJDADiscord(this)
                 .peek(discordSetter(this))
-                .onFailure(errorLogger());
+                .onFailure(this::logError);
         long fiveSecs = 5L * 20L;
         getCommand("spicord").setExecutor(bukkitCommand((commander, args) ->
                 executeSpicordCommand(this, commander, args)
-                        .onFailure(errorLogger())));
+                        .onFailure(this::logError)));
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             if (!getData().getDiscord().isRunning()) {
                 reconnectDiscord(this);
@@ -61,8 +60,8 @@ public class SpicordPlugin extends JavaPlugin implements SpicordPlatform {
         setDiscord(null);
     }
 
-    public Consumer<Throwable> errorLogger() {
-        return SpicordRoutines.errorLogger(getLogger());
+    public void logError(Throwable throwable) {
+        SpicordRoutines.logError(getLogger(), throwable);
     }
 
     public void setDiscord(Discord discord) {

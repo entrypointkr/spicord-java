@@ -1,9 +1,7 @@
 package kr.entree.spicord.bungee;
 
 import io.vavr.Lazy;
-import io.vavr.collection.List;
 import kr.entree.spicord.*;
-import kr.entree.spicord.bungee.config.Yamls;
 import kr.entree.spicord.discord.Discord;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,22 +9,16 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.File;
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import static io.vavr.API.Seq;
-import static io.vavr.Predicates.not;
 import static kr.entree.spicord.SpicordData.emptyData;
 import static kr.entree.spicord.SpicordPath.pathOf;
 import static kr.entree.spicord.SpicordRoutines.*;
 import static kr.entree.spicord.bungee.command.BungeeCommands.bungeeCommand;
-import static kr.entree.spicord.bungee.config.Yamls.saveYaml;
 import static kr.entree.spicord.bungee.task.BungeeExecutors.pluginAsyncExecutor;
 import static kr.entree.spicord.bungee.task.BungeeExecutors.pluginExecutor;
-import static kr.entree.spicord.config.FileUtils.saveFile;
-import static kr.entree.spicord.config.SpicordConfig.defaultConfig;
 import static kr.entree.spicord.discord.Discords.emptyDiscord;
 
 public class SpicordBungeePlugin extends Plugin implements SpicordPlatform {
@@ -54,13 +46,13 @@ public class SpicordBungeePlugin extends Plugin implements SpicordPlatform {
         // 2, 4
         setData(loadAllSpicordData(this)
                 .withDiscord(createJDADiscord(this)
-                        .onFailure(errorLogger())
+                        .onFailure(this::logError)
                         .getOrElse(emptyDiscord())));
         // 3
         ProxyServer.getInstance().getPluginManager()
                 .registerCommand(this, bungeeCommand("spicord", Seq(), (commander, args) ->
                         executeSpicordCommand(this, commander, args)
-                                .onFailure(errorLogger())));
+                                .onFailure(this::logError)));
         // 5
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             if (!getData().getDiscord().isRunning()) {
@@ -73,8 +65,8 @@ public class SpicordBungeePlugin extends Plugin implements SpicordPlatform {
         setData(getData().withDiscord(discord != null ? discord : emptyDiscord()));
     }
 
-    public Consumer<Throwable> errorLogger() {
-        return SpicordRoutines.errorLogger(getLogger());
+    public void logError(Throwable throwable) {
+        SpicordRoutines.logError(getLogger(), throwable);
     }
 
     @Override
